@@ -1,22 +1,33 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Layout, FileCode, Terminal, Sparkles, Star, Calendar, Code2 as Github, MessageCircle as Twitter, Briefcase as Linkedin, Mail, Circle } from 'lucide-react';
 import { BRAND, Project, Testimonial } from "@/lib/data";
-type SkillCategory = any;
-const SkillCategory: any = [];
-type ExperienceEntry = any;
-const ExperienceEntry: any = [];
 import { fadeInUp, staggerContainer } from "@/lib/motion";
 import { Reveal } from "@/components/Reveal";
 import { cn } from "@/lib/utils";
+
+interface SkillCategory {
+  category: string;
+  items: string[];
+}
+
+interface ExperienceEntry {
+  period: string;
+  title: string;
+  description: string;
+}
 
 const FEATURED_PROJECTS: Project[] = [
   {
     title: "Northbeam Analytics Rebuild",
     description:
       "Redesigned a data-dense analytics dashboard from the ground up, cutting time-to-insight and giving the front-end team a component library that shipped features twice as fast.",
-    image: "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/387e8983af8c4086892a955e0d759efd.png",
+    image:
+      "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/387e8983af8c4086892a955e0d759efd.png",
     tags: ["Product Design", "Design Systems", "Next.js"],
     href: "/projects",
     featured: true,
@@ -25,7 +36,8 @@ const FEATURED_PROJECTS: Project[] = [
     title: "Fieldnote Design Language",
     description:
       "A token-based design system spanning web, iOS, and internal tools, built to keep a fast-moving product team visually consistent without slowing anyone down.",
-    image: "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/206a0406bd07423a811580d5506cedca.jpg",
+    image:
+      "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/206a0406bd07423a811580d5506cedca.jpg",
     tags: ["Design Tokens", "Figma", "Documentation"],
     href: "/projects",
   },
@@ -33,7 +45,8 @@ const FEATURED_PROJECTS: Project[] = [
     title: "Loft & Co. Storefront",
     description:
       "A commerce experience built around editorial photography and restrained motion, tuned for conversion without feeling like a template.",
-    image: "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/0ce1eea8263745c9ad9557db4c460d4a.webp",
+    image:
+      "https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/0ce1eea8263745c9ad9557db4c460d4a.webp",
     tags: ["E-commerce", "Art Direction", "Motion"],
     href: "/projects",
   },
@@ -98,190 +111,140 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     quote:
-      "She pushed back on scope in the right places and the product was better for it. Deadlines never slipped and quality never dropped.",
-    author: "Theo Marsh",
-    role: "Founder, Fieldnote Studio",
+      "She pushed back on scope in the right places and the product was better for it. Every handoff was clean, documented, and ready to build.",
+    author: "Devon Marsh",
+    role: "Founder, Loft & Co.",
   },
   {
     quote:
-      "Working with Mara felt like adding a design lead and a front-end engineer at once. The handoff friction we used to fight just disappeared.",
-    author: "Priya Anand",
-    role: "Head of Engineering, Loft & Co.",
+      "Rare to find someone who treats craft and deadlines as equally non-negotiable. The work speaks for itself.",
+    author: "Priya Chandran",
+    role: "Head of Design, Fieldnote Studio",
   },
 ];
 
 export default function HomePage() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubscribe = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!(email ?? "").trim()) return;
+    setSubmitted(true);
+    setEmail("");
+  };
+
   return (
-    <main className="bg-zinc-950 text-zinc-100">
-      {/* HERO */}
-      <Reveal>
-        <section
-          id="hero"
-          className="relative overflow-hidden border-b border-white/10 bg-zinc-950 px-6 pb-20 pt-24 md:px-10 md:pb-28 md:pt-32"
+    <div className="overflow-hidden">
+      {/* Hero */}
+      <section className="relative mx-auto max-w-6xl px-6 pb-20 pt-20 md:px-8 md:pb-28 md:pt-28">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+          className="max-w-3xl"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full bg-amber-400/10 blur-[120px]"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:56px_56px]"
-          />
-          <div className="relative mx-auto grid max-w-6xl gap-14 md:grid-cols-[1.1fr_0.9fr] md:items-center">
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="flex flex-col items-start gap-6"
-            >
-              <motion.span
-                variants={fadeInUp}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium tracking-wide text-zinc-300"
-              >
-                <Circle className="h-2 w-2 fill-amber-400 text-amber-400" aria-hidden="true" />
-                Available for new projects
-              </motion.span>
-
-              <motion.h1
-                variants={fadeInUp}
-                className="text-balance text-4xl font-semibold leading-[1.1] tracking-tight text-zinc-50 sm:text-5xl md:text-6xl"
-              >
-                {BRAND.name}, product designer and front-end engineer.
-              </motion.h1>
-
-              <motion.p variants={fadeInUp} className="max-w-xl text-pretty text-lg leading-relaxed text-zinc-400">
-                {BRAND.tagline}
-              </motion.p>
-
-              <motion.div variants={fadeInUp} className="flex flex-wrap items-center gap-4 pt-2">
-                <Link
-                  href="/projects"
-                  className="group inline-flex items-center gap-2 rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(251,191,36,0.5)] transition-all duration-300 ease-out hover:bg-amber-300 hover:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_12px_32px_-8px_rgba(251,191,36,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-                >
-                  View projects
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-zinc-100 transition-all duration-300 ease-out hover:border-white/30 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-                >
-                  Start a project
-                </Link>
-              </motion.div>
-
-              <motion.div variants={fadeInUp} className="flex items-center gap-4 pt-4 text-zinc-500">
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="GitHub profile"
-                  className="transition-colors duration-300 hover:text-zinc-100"
-                >
-                  <Github className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Twitter profile"
-                  className="transition-colors duration-300 hover:text-zinc-100"
-                >
-                  <Twitter className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="LinkedIn profile"
-                  className="transition-colors duration-300 hover:text-zinc-100"
-                >
-                  <Linkedin className="h-5 w-5" aria-hidden="true" />
-                </a>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
-              className="relative mx-auto w-full max-w-sm"
-            >
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.3),0_24px_48px_-16px_rgba(0,0,0,0.6)] ring-1 ring-white/5">
-                <Image
-                  src="https://titoaistorageaccount.blob.core.windows.net/titoai-storage/site-images/c35e092652f44bda85de858761a5609d.jpg"
-                  alt={`Portrait of ${BRAND.name}`}
-                  width={480}
-                  height={600}
-                  className="h-full w-full object-cover"
-                  priority
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 flex items-center gap-3 rounded-2xl border border-white/10 bg-zinc-900/90 px-4 py-3 shadow-[0_1px_2px_rgba(0,0,0,0.3),0_16px_32px_-12px_rgba(0,0,0,0.6)] backdrop-blur">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400/15 text-amber-400">
-                  <Sparkles className="h-4 w-4" aria-hidden="true" />
-                </span>
-                <div className="text-left">
-                  <p className="text-xs font-medium text-zinc-400">Currently building</p>
-                  <p className="text-sm font-semibold text-zinc-100">Fieldnote Design Language</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      </Reveal>
-
-      {/* FEATURED WORK */}
-      <section id="work" className="border-b border-white/10 bg-zinc-950 px-6 py-24 md:px-10 md:py-32">
-        <div className="mx-auto max-w-6xl">
-          <Reveal className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-medium uppercase tracking-wider text-amber-400">Selected work</p>
-              <h2 className="mt-3 max-w-xl text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-                Products shaped end to end, from first sketch to shipped code.
-              </h2>
-            </div>
+          <motion.p
+            variants={fadeInUp}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)] px-4 py-1.5 text-sm text-[var(--muted-foreground)]"
+          >
+            <Circle className="h-2 w-2 fill-[var(--primary)] text-[var(--primary)]" aria-hidden="true" />
+            Available for select projects
+          </motion.p>
+          <motion.h1
+            variants={fadeInUp}
+            className="text-balance text-4xl font-semibold tracking-tight text-[var(--foreground)] sm:text-5xl md:text-6xl"
+          >
+            {BRAND?.name ?? "Portfolio"}, product designer and front-end builder.
+          </motion.h1>
+          <motion.p
+            variants={fadeInUp}
+            className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-[var(--muted-foreground)]"
+          >
+            {BRAND?.tagline ?? "Designing and building thoughtful digital products."} I partner with founders and product teams to design and ship interfaces that hold up in production.
+          </motion.p>
+          <motion.div variants={fadeInUp} className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href="/projects"
-              className="group inline-flex items-center gap-2 text-sm font-semibold text-zinc-300 transition-colors duration-300 hover:text-amber-400"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--background)] transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none"
             >
-              See all projects
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+              View work
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition-colors duration-300 hover:border-[var(--primary)] hover:text-[var(--primary)] focus-visible:outline-none"
+            >
+              Get in touch
+            </Link>
+            <a
+              href="/resume.pdf"
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--muted-foreground)] transition-colors duration-300 hover:text-[var(--foreground)] focus-visible:outline-none"
+            >
+              Download résumé
+            </a>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Featured Projects */}
+      <section className="border-t border-[var(--border)] bg-[var(--card)]">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8 md:py-32">
+          <Reveal>
+            <div className="mb-14 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+                  Selected work
+                </h2>
+                <p className="mt-3 max-w-xl text-pretty leading-relaxed text-[var(--muted-foreground)]">
+                  A few projects that show the range between systems thinking and finished, shipped detail.
+                </p>
+              </div>
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--primary)] transition-transform duration-300 hover:translate-x-0.5"
+              >
+                All projects
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {FEATURED_PROJECTS.map((project, i) => (
-              <Reveal
-                key={project.title}
-                delay={i * 0.1}
-                className={cn(project.featured ? "md:col-span-2" : "md:col-span-1")}
-              >
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {(FEATURED_PROJECTS ?? []).map((project, index) => (
+              <Reveal key={project?.title ?? index} delay={index * 0.1}>
                 <Link
-                  href={project.href}
-                  className="group block h-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/60 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(0,0,0,0.4)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_20px_40px_-12px_rgba(0,0,0,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                  href={project?.href ?? "/projects"}
+                  className={cn(
+                    "group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--background)] shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(0,0,0,0.4)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/40",
+                    project?.featured ? "md:col-span-1" : ""
+                  )}
                 >
-                  <div className={cn("relative w-full overflow-hidden", project.featured ? "aspect-[21/9]" : "aspect-[16/10]")}>
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
                     <Image
-                      src={project.image}
-                      alt={project.title}
+                      src={project?.image ?? "/placeholder.png"}
+                      alt={project?.title ?? "Project image"}
                       fill
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/10 to-transparent" />
                   </div>
-                  <div className="flex flex-col gap-3 p-6">
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="text-lg font-semibold text-[var(--foreground)]">
+                      {project?.title ?? "Untitled project"}
+                    </h3>
+                    <p className="mt-2 flex-1 text-pretty text-sm leading-relaxed text-[var(--muted-foreground)]">
+                      {project?.description ?? ""}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {(project?.tags ?? []).map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-zinc-400"
+                          className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted-foreground)]"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <h3 className="text-xl font-semibold tracking-tight text-zinc-50">{project.title}</h3>
-                    <p className="text-sm leading-relaxed text-zinc-400">{project.description}</p>
                   </div>
                 </Link>
               </Reveal>
@@ -290,67 +253,72 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SKILLS / APPROACH */}
-      <section id="skills" className="border-b border-white/10 bg-zinc-900/40 px-6 py-24 md:px-10 md:py-32">
-        <div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-[0.8fr_1.2fr] md:items-start">
-          <Reveal>
-            <p className="text-sm font-medium uppercase tracking-wider text-amber-400">How I work</p>
-            <h2 className="mt-3 max-w-md text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-              Design and engineering under one roof, not handed off between teams.
+      {/* Skills */}
+      <section className="mx-auto max-w-6xl px-6 py-24 md:px-8 md:py-32">
+        <Reveal>
+          <div className="mb-14 max-w-xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+              Skills & tools
             </h2>
-            <p className="mt-5 max-w-md text-pretty leading-relaxed text-zinc-400">
-              Most gaps between a mockup and a shipped feature come from a handoff. I close that gap by doing both, so
-              the details survive contact with real code.
+            <p className="mt-3 text-pretty leading-relaxed text-[var(--muted-foreground)]">
+              A working toolkit built across design and engineering, kept sharp on real client work.
             </p>
-          </Reveal>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            {SKILLS.map((skill, i) => {
-              const Icon = skill.icon;
-              return (
-                <Reveal key={skill.category} delay={i * 0.08}>
-                  <div className="h-full rounded-2xl border border-white/10 bg-zinc-950/60 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(0,0,0,0.35)] transition-all duration-300 ease-out hover:border-white/20">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <h3 className="mt-4 text-base font-semibold text-zinc-50">{skill.category}</h3>
-                    <ul className="mt-3 flex flex-col gap-2">
-                      {skill.items.map((item) => (
-                        <li key={item} className="flex items-center gap-2 text-sm text-zinc-400">
-                          <Circle className="h-1.5 w-1.5 fill-zinc-600 text-zinc-600" aria-hidden="true" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Reveal>
-              );
-            })}
           </div>
+        </Reveal>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {(SKILLS ?? []).map((skill, index) => {
+            const Icon = skill?.icon ?? Layout;
+            return (
+              <Reveal key={skill?.category ?? index} delay={index * 0.08}>
+                <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="font-semibold text-[var(--foreground)]">
+                    {skill?.category ?? "Skill"}
+                  </h3>
+                  <ul className="mt-3 flex flex-col gap-2">
+                    {(skill?.items ?? []).map((item) => (
+                      <li key={item} className="text-sm text-[var(--muted-foreground)]">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 
-      {/* EXPERIENCE TIMELINE */}
-      <section id="experience" className="border-b border-white/10 bg-zinc-950 px-6 py-24 md:px-10 md:py-32">
-        <div className="mx-auto max-w-4xl">
+      {/* Experience */}
+      <section className="border-t border-[var(--border)] bg-[var(--card)]">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8 md:py-32">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-wider text-amber-400">Path so far</p>
-            <h2 className="mt-3 max-w-xl text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-              A decade moving between design tools and a code editor.
-            </h2>
+            <div className="mb-14 max-w-xl">
+              <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+                Experience
+              </h2>
+              <p className="mt-3 text-pretty leading-relaxed text-[var(--muted-foreground)]">
+                A decade of studio and in-house work, moving between hands-on design and technical delivery.
+              </p>
+            </div>
           </Reveal>
-
-          <div className="mt-12 flex flex-col">
-            {EXPERIENCE.map((entry, i) => (
-              <Reveal key={entry.title} delay={i * 0.08}>
-                <div className="grid grid-cols-[auto_1fr] gap-6 border-t border-white/10 py-8 first:border-t-0 sm:grid-cols-[180px_1fr]">
-                  <div className="flex items-start gap-2 text-sm font-medium text-zinc-500">
-                    <Calendar className="h-4 w-4 shrink-0" aria-hidden="true" />
-                    <span>{entry.period}</span>
+          <div className="flex flex-col divide-y divide-[var(--border)]">
+            {(EXPERIENCE ?? []).map((entry, index) => (
+              <Reveal key={entry?.title ?? index} delay={index * 0.06}>
+                <div className="grid grid-cols-1 gap-4 py-8 md:grid-cols-[200px_1fr]">
+                  <div className="flex items-center gap-2 text-sm font-medium text-[var(--muted-foreground)]">
+                    <Calendar className="h-4 w-4" aria-hidden="true" />
+                    {entry?.period ?? ""}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold tracking-tight text-zinc-50">{entry.title}</h3>
-                    <p className="mt-2 max-w-2xl text-pretty leading-relaxed text-zinc-400">{entry.description}</p>
+                    <h3 className="font-semibold text-[var(--foreground)]">
+                      {entry?.title ?? ""}
+                    </h3>
+                    <p className="mt-2 max-w-2xl text-pretty text-sm leading-relaxed text-[var(--muted-foreground)]">
+                      {entry?.description ?? ""}
+                    </p>
                   </div>
                 </div>
               </Reveal>
@@ -359,68 +327,90 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section id="testimonials" className="border-b border-white/10 bg-zinc-900/40 px-6 py-24 md:px-10 md:py-32">
-        <div className="mx-auto max-w-6xl">
-          <Reveal>
-            <p className="text-sm font-medium uppercase tracking-wider text-amber-400">What people say</p>
-            <h2 className="mt-3 max-w-xl text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-              Feedback from the people I've shipped with.
+      {/* Testimonials */}
+      <section className="mx-auto max-w-6xl px-6 py-24 md:px-8 md:py-32">
+        <Reveal>
+          <div className="mb-14 max-w-xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+              What people say
             </h2>
-          </Reveal>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((testimonial, i) => (
-              <Reveal key={testimonial.author} delay={i * 0.1} className="h-full">
-                <figure className="flex h-full flex-col justify-between gap-6 rounded-2xl border border-white/10 bg-zinc-950/60 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(0,0,0,0.35)]">
-                  <div>
-                    <div className="flex gap-1 text-amber-400">
-                      {[0, 1, 2, 3, 4].map((star) => (
-                        <Star key={star} className="h-4 w-4 fill-amber-400" aria-hidden="true" />
-                      ))}
-                    </div>
-                    <blockquote className="mt-4 text-pretty leading-relaxed text-zinc-300">
-                      "{testimonial.quote}"
-                    </blockquote>
-                  </div>
-                  <figcaption className="border-t border-white/10 pt-4">
-                    <p className="text-sm font-semibold text-zinc-50">{testimonial.author}</p>
-                    <p className="text-sm text-zinc-500">{testimonial.role}</p>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
+            <p className="mt-3 text-pretty leading-relaxed text-[var(--muted-foreground)]">
+              Feedback from partners and teams I've worked closely with.
+            </p>
           </div>
+        </Reveal>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {(TESTIMONIALS ?? []).map((testimonial, index) => (
+            <Reveal key={testimonial?.author ?? index} delay={index * 0.08}>
+              <div className="flex h-full flex-col rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+                <div className="mb-4 flex gap-1 text-[var(--primary)]">
+                  {Array.from({ length: 5 }).map((_, starIndex) => (
+                    <Star key={starIndex} className="h-4 w-4 fill-current" aria-hidden="true" />
+                  ))}
+                </div>
+                <p className="flex-1 text-pretty text-sm leading-relaxed text-[var(--foreground)]">
+                  &ldquo;{testimonial?.quote ?? ""}&rdquo;
+                </p>
+                <div className="mt-6">
+                  <p className="font-semibold text-[var(--foreground)]">
+                    {testimonial?.author ?? "Anonymous"}
+                  </p>
+                  <p className="text-sm text-[var(--muted-foreground)]">
+                    {testimonial?.role ?? ""}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* CONTACT CTA */}
-      <section id="contact-cta" className="relative overflow-hidden bg-zinc-950 px-6 py-24 md:px-10 md:py-32">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 h-72 w-[640px] -translate-x-1/2 rounded-full bg-amber-400/10 blur-[120px]"
-        />
-        <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium tracking-wide text-zinc-300">
-            <Mail className="h-3.5 w-3.5 text-amber-400" aria-hidden="true" />
-            Currently booking Q3 projects
-          </span>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-            Have a product that needs design and code to move together?
-          </h2>
-          <p className="max-w-xl text-pretty leading-relaxed text-zinc-400">
-            Tell me about the problem you're solving. I'll reply within a couple of days with honest thoughts on scope
-            and fit.
-          </p>
-          <Link
-            href="/contact"
-            className="group mt-2 inline-flex items-center gap-2 rounded-full bg-amber-400 px-7 py-3.5 text-sm font-semibold text-zinc-950 shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_-8px_rgba(251,191,36,0.5)] transition-all duration-300 ease-out hover:bg-amber-300 hover:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_12px_32px_-8px_rgba(251,191,36,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-          >
-            Get in touch
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
-          </Link>
-        </Reveal>
+      {/* Newsletter / Contact CTA */}
+      <section className="border-t border-[var(--border)] bg-[var(--card)]">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8 md:py-32">
+          <Reveal>
+            <div className="flex flex-col items-start justify-between gap-8 rounded-2xl border border-[var(--border)] bg-[var(--background)] p-10 md:flex-row md:items-center">
+              <div>
+                <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] sm:text-3xl">
+                  Get occasional updates
+                </h2>
+                <p className="mt-3 max-w-md text-pretty leading-relaxed text-[var(--muted-foreground)]">
+                  New case studies and writing on design systems, sent a few times a year. No spam.
+                </p>
+              </div>
+              <form
+                onSubmit={handleSubscribe}
+                className="flex w-full max-w-md flex-col gap-3 sm:flex-row"
+              >
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  required
+                  value={email ?? ""}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full rounded-full border border-[var(--border)] bg-[var(--card)] px-5 py-3 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--background)] transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none"
+                >
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  Subscribe
+                </button>
+              </form>
+            </div>
+            {submitted && (
+              <p className="mt-4 text-sm text-[var(--primary)]">
+                Thanks for subscribing.
+              </p>
+            )}
+          </Reveal>
+        </div>
       </section>
-    </main>
+    </div>
   );
 }

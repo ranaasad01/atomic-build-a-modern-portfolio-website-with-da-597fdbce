@@ -270,7 +270,7 @@ export default function ProjectsPage() {
     return sorted;
   }, [activeCategory, sortBy]);
 
-  const caseStudy = PROJECTS.find((p) => p.id === "northwind-banking") ?? PROJECTS[0];
+  const caseStudy = PROJECTS.find((p) => p.id === "northwind-banking") ?? PROJECTS[0] ?? ({} as ProjectItem);
 
   return (
     <main className="bg-[hsl(var(--background))]">

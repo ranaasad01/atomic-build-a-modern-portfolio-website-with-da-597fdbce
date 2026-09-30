@@ -205,7 +205,7 @@ export default function AboutPage() {
                 variants={fadeInUp}
                 className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-amber-400"
               >
-                About {BRAND.shortName}
+                About {BRAND.name.split(" ")[0]}
               </motion.span>
               <motion.h1
                 variants={fadeInUp}
