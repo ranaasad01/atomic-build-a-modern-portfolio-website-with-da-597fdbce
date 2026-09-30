@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "brand": "Studio Noir",
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "footer": {
+    "description": "Construyendo interfaces que mantienen su forma bajo presión, un proyecto a la vez.",
+    "quickLinksHeading": "Enlaces rápidos",
+    "socialHeading": "Encuéntrame en otros lugares",
+    "contactCta": "Iniciar un proyecto",
+    "rights": "Todos los derechos reservados.",
+    "backToTop": "Volver al inicio"
+  }
+}
